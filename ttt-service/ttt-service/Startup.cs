@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ttt_service.Data;
+using ttt_service.Services;
 
 namespace ttt_service
 {
@@ -31,6 +34,10 @@ namespace ttt_service
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ttt-service", Version = "v1" });
             });
+
+            services.AddDbContext<GameContext>(opt => opt.UseInMemoryDatabase("dbTicTacToeGamesInMemory"));
+
+            services.AddScoped<IGameService, GameService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

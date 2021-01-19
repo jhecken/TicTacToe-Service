@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ttt_service.Services;
+using ttt_service.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,6 +14,12 @@ namespace ttt_service.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
+        private readonly IGameService _gameService;
+        public GameController(IGameService gameService)
+        {
+            _gameService = gameService;
+        }
+
         // GET: api/<GameController>
         [HttpGet]
         public IEnumerable<string> Get()

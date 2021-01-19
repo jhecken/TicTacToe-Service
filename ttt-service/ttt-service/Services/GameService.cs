@@ -6,9 +6,9 @@ using ttt_service.Models;
 
 namespace ttt_service.Services
 {
-    public class GameService
+    public class GameService : IGameService
     {
-        public GameModel NewGame()
+        public GameModel NewGame(int p1Id, int p2Id)
         {
             throw new NotImplementedException();
         }

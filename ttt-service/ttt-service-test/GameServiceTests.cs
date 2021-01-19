@@ -3,7 +3,7 @@ using Xunit;
 
 namespace ttt_service_test
 {
-    public class UnitTest1
+    public class GameServiceTests
     {
         [Fact]
         public void Test1()
