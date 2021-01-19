@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Xunit;
 
 namespace ttt_service_test
 {
-    class GameRepoTests
+    public class GameRepoTests
     {
     }
 }

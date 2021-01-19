@@ -16,7 +16,13 @@ namespace ttt_service.Services
         }
         public GameModel NewGame(int p1Id, int p2Id)
         {
-            throw new NotImplementedException();
+            return new GameModel
+            {
+                GameID = Guid.NewGuid(),
+                PlayerOneID = p1Id,
+                PlayerTwoID = p2Id,
+                BoardSpaces = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1 }
+            };
         }
     }
 }
