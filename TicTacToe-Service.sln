@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ttt-service", "ttt-service\ttt-service.csproj", "{06BB43AF-7511-4679-BBE3-C8F47E8ED928}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ttt-service", "ttt-service\ttt-service.csproj", "{06BB43AF-7511-4679-BBE3-C8F47E8ED928}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ttt-service-test", "ttt-service-test\ttt-service-test.csproj", "{85AAAC93-6580-4282-9A8F-8C81BC8711CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ttt-service-test", "ttt-service-test\ttt-service-test.csproj", "{85AAAC93-6580-4282-9A8F-8C81BC8711CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
