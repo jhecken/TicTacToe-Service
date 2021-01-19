@@ -38,6 +38,7 @@ namespace ttt_service
             services.AddDbContext<GameContext>(opt => opt.UseInMemoryDatabase("dbTicTacToeGamesInMemory"));
 
             services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IGameRepo, GameRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
