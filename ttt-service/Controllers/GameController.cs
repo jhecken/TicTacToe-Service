@@ -22,14 +22,14 @@ namespace ttt_service.Controllers
 
         // GET: api/<GameController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> NewGame(int playerOneId, int playerTwoId)
         {
-            return new string[] { "value1", "value2" };
+            return Ok(await _gameService.NewGame(playerOneId, playerTwoId));
         }
 
         // GET api/<GameController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string Get(Guid id)
         {
             return "value";
         }
@@ -48,7 +48,7 @@ namespace ttt_service.Controllers
 
         // DELETE api/<GameController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
         }
     }

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using ttt_service.Models;
 
-namespace ttt_service.Data
+namespace ttt_service.Utils
 {
-    public interface IGameRepo
+    public interface IGameFactory
     {
-        Task<GameModel> CreateGame(GameModel game);
+        GameModel CreateGameInstance(int p1Id, int p2Id);
     }
 }

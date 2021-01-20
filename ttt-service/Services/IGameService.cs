@@ -8,6 +8,6 @@ namespace ttt_service.Services
 {
     public interface IGameService
     {
-        GameModel NewGame(int p1Id, int p2Id);
+        Task<GameModel> NewGame(int p1Id, int p2Id);
     }
 }
