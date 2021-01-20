@@ -64,5 +64,29 @@ namespace ttt_service_test
             // assert
             _mockGameRepo.Verify(m => m.CreateGame(gameModel), Times.Once());
         }
+
+        [Fact]
+        public async void GetGameCallsRepoGetGame()
+        {
+            // arrange
+            var playerOneId = 1;
+            var playerTwoId = -1;
+            var gameId = Guid.NewGuid();
+            var gameModel = new GameModel
+            {
+                GameID = gameId,
+                PlayerOneID = playerOneId,
+                PlayerTwoID = playerTwoId
+            };
+
+            //_mockGameFactory.Setup(m => m.CreateGameInstance(playerOneId, playerTwoId)).Returns(gameModel);
+            _mockGameRepo.Setup(m => m.GetGame(gameId)).ReturnsAsync(gameModel);
+
+            // act
+            var returnVal = await _gameService.GetGame(gameId);
+
+            // assert
+            _mockGameRepo.Verify(m => m.GetGame(gameId), Times.Once());
+        }
     }
 }

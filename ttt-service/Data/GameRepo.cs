@@ -22,5 +22,15 @@ namespace ttt_service.Data
             return gameEntity.Entity;
 
         }
+
+        public async Task<GameModel> GetGame(Guid id)
+        {
+            return await _gameContext.Games.FindAsync(id);
+        }
+
+        public Task<GameModel> UpdateGame(GameModel game)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

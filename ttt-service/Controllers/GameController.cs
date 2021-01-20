@@ -29,9 +29,9 @@ namespace ttt_service.Controllers
 
         // GET api/<GameController>/5
         [HttpGet("{id}")]
-        public string Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
+            return Ok(await _gameService.GetGame(id));
         }
 
         // POST api/<GameController>
@@ -42,8 +42,9 @@ namespace ttt_service.Controllers
 
         // PUT api/<GameController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public Task<IActionResult> Put(Guid id, [FromBody] int spaceIndex, int player)
         {
+            throw new NotImplementedException();
         }
 
         // DELETE api/<GameController>/5

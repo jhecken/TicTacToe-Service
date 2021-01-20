@@ -53,5 +53,44 @@ namespace ttt_service_test
                     });
             }
         }
+
+        [Fact]
+        public async void GetGameReturnsCorrectGame()
+        {
+            // arrange
+            var options = new DbContextOptionsBuilder<GameContext>()
+                .UseInMemoryDatabase(databaseName: "testGameDbGet")
+                .Options;
+
+            int p1Id = 1, p2Id = -1;
+            var newGuid = Guid.NewGuid();
+
+            var gameModel = new GameModel
+            {
+                GameID = newGuid,
+                PlayerOneID = p1Id,
+                PlayerTwoID = p2Id,
+                BoardSpaces = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+                WinnerID = -1
+            };
+
+            // act
+            using (var context = new GameContext(options))
+            {
+                context.Games.Add(gameModel);
+                context.SaveChanges();
+            }
+
+            //assert
+            using (var context = new GameContext(options))
+            {
+                var gameRepo = new GameRepo(context);
+                var returnGame = await gameRepo.GetGame(newGuid);
+
+                Assert.Equal(newGuid, returnGame.GameID);
+                Assert.Equal(p1Id, returnGame.PlayerOneID);
+                Assert.Equal(p2Id, returnGame.PlayerTwoID);
+            }
+        }
     }
 }

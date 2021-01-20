@@ -15,12 +15,18 @@ namespace ttt_service.Services
             _gameRepo = gameRepo;
             _gameFactory = gameFactory;
         }
+
         public async Task<GameModel> NewGame(int p1Id, int p2Id)
         {
             var newGame = _gameFactory.CreateGameInstance(p1Id, p2Id);
 
             newGame = await _gameRepo.CreateGame(newGame);
             return newGame;
+        }
+
+        public async Task<GameModel> GetGame(Guid id)
+        {
+            return await _gameRepo.GetGame(id);
         }
     }
 }
