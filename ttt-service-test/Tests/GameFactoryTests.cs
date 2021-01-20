@@ -5,7 +5,7 @@ using ttt_service.Models;
 using ttt_service.Utils;
 using Xunit;
 
-namespace ttt_service_test.Tests
+namespace ttt_service_test
 {
     public class GameFactoryTests
     {
