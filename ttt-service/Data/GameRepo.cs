@@ -8,9 +8,19 @@ namespace ttt_service.Data
 {
     public class GameRepo : IGameRepo
     {
-        public Task<GameModel> CreateGame(GameModel game)
+        private readonly GameContext _gameContext;
+
+        public GameRepo(GameContext gameContext)
         {
-            throw new NotImplementedException();
+            _gameContext = gameContext;
+        }
+
+        public async Task<GameModel> CreateGame(GameModel game)
+        {
+            var gameEntity = await _gameContext.AddAsync(game);
+            await _gameContext.SaveChangesAsync();
+            return gameEntity.Entity;
+
         }
     }
 }
