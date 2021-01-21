@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +34,18 @@ namespace ttt_service.Data
             var gameEntity = _gameContext.Update(game);
             await _gameContext.SaveChangesAsync();
             return gameEntity.Entity;
+        }
+
+        public async Task<GameModel> DeleteGame(Guid id)
+        {
+            var gameToDelete = await _gameContext.Games.FirstOrDefaultAsync<GameModel>(g => g.GameID == id);
+
+            if(gameToDelete != null)
+            {
+                _gameContext.Remove<GameModel>(gameToDelete);
+                await _gameContext.SaveChangesAsync();
+            }
+            return gameToDelete;
         }
     }
 }

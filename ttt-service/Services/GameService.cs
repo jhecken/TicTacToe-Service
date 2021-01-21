@@ -45,5 +45,10 @@ namespace ttt_service.Services
 
             return await _gameRepo.UpdateGame(game);
         }
+
+        public async Task<GameModel> DeleteGame(Guid id)
+        {
+            return await _gameRepo.DeleteGame(id);
+        }
     }
 }

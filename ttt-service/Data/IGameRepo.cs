@@ -13,5 +13,7 @@ namespace ttt_service.Data
         Task<GameModel> GetGame(Guid id);
 
         Task<GameModel> UpdateGame(GameModel game);
+
+        Task<GameModel> DeleteGame(Guid newGuid);
     }
 }

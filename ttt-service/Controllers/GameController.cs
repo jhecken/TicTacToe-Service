@@ -34,12 +34,6 @@ namespace ttt_service.Controllers
             return Ok(await _gameService.GetGame(id));
         }
 
-        // POST api/<GameController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
         // PUT api/<GameController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] int spaceIndex, int player)
@@ -49,8 +43,9 @@ namespace ttt_service.Controllers
 
         // DELETE api/<GameController>/5
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            return Ok(await _gameService.DeleteGame(id));
         }
     }
 }

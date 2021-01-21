@@ -164,5 +164,28 @@ namespace ttt_service_test
             _mockGameRepo.Verify(m => m.UpdateGame(gameModel), Times.Once());
 
         }
+
+        [Fact]
+        public async void DeleteGameCallsRepoDeleteGame()
+        {
+            // arrange
+            var playerOneId = 1;
+            var playerTwoId = -1;
+            var gameId = Guid.NewGuid();
+            var gameModel = new GameModel
+            {
+                GameID = gameId,
+                PlayerOneID = playerOneId,
+                PlayerTwoID = playerTwoId
+            };
+
+            _mockGameRepo.Setup(m => m.DeleteGame(gameId)).ReturnsAsync(gameModel);
+
+            // act
+            var returnVal = await _gameService.DeleteGame(gameId);
+
+            // assert
+            _mockGameRepo.Verify(m => m.DeleteGame(gameId), Times.Once());
+        }
     }
 }
