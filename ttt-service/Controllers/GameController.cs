@@ -42,9 +42,9 @@ namespace ttt_service.Controllers
 
         // PUT api/<GameController>/5
         [HttpPut("{id}")]
-        public Task<IActionResult> Put(Guid id, [FromBody] int spaceIndex, int player)
+        public async Task<IActionResult> Put(Guid id, [FromBody] int spaceIndex, int player)
         {
-            throw new NotImplementedException();
+            return Ok(await _gameService.MakeMove(id, spaceIndex, player));
         }
 
         // DELETE api/<GameController>/5

@@ -28,5 +28,22 @@ namespace ttt_service.Services
         {
             return await _gameRepo.GetGame(id);
         }
+
+        public async Task<GameModel> MakeMove(Guid gameId, int spaceIndex, int playerNum)
+        {
+            if (playerNum != 1 && playerNum != 2)
+                throw new ArgumentOutOfRangeException("Player number must be either a 1 or a 2.");
+            if (spaceIndex < 0 || spaceIndex > 8)
+                throw new ArgumentOutOfRangeException("Space Index must be between 0 and 8 (inclusive).");
+
+            var game = await _gameRepo.GetGame(gameId);
+
+            if (game.BoardSpaces[spaceIndex] != -1)
+                throw new ArgumentOutOfRangeException("That space has already been claimed.");
+
+            game.BoardSpaces[spaceIndex] = playerNum;
+
+            return await _gameRepo.UpdateGame(game);
+        }
     }
 }

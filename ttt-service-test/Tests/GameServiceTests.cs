@@ -79,7 +79,6 @@ namespace ttt_service_test
                 PlayerTwoID = playerTwoId
             };
 
-            //_mockGameFactory.Setup(m => m.CreateGameInstance(playerOneId, playerTwoId)).Returns(gameModel);
             _mockGameRepo.Setup(m => m.GetGame(gameId)).ReturnsAsync(gameModel);
 
             // act
@@ -87,6 +86,83 @@ namespace ttt_service_test
 
             // assert
             _mockGameRepo.Verify(m => m.GetGame(gameId), Times.Once());
+        }
+
+        [Fact]
+        public async void MakeMoveThowsExceptionWhenInvalidPlayer()
+        {
+            //arrange
+            var playerNum = 5;
+            var gameGuid = Guid.NewGuid();
+            var spaceIndex = 4;
+
+            //act
+            //assert
+            var result = await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _gameService.MakeMove(gameGuid, spaceIndex, playerNum));
+        }
+        [Fact]
+        public async void MakeMoveThowsExceptionWhenInvalidIndex()
+        {
+            //arrange
+            var playerNum = 1;
+            var gameGuid = Guid.NewGuid();
+            var spaceIndex = 9;
+
+            //act
+            //assert
+            var result = await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _gameService.MakeMove(gameGuid, spaceIndex, playerNum));
+        }
+
+        [Fact]
+        public async void MakeMoveThrowsWhenSpaceAlreadyClaimed()
+        {
+            // arrange
+            var playerOneId = 1;
+            var playerTwoId = -1;
+            var gameId = Guid.NewGuid();
+
+            var gameModel = new GameModel
+            {
+                GameID = gameId,
+                PlayerOneID = playerOneId,
+                PlayerTwoID = playerTwoId,
+                BoardSpaces = new int[] { 1, -1, -1, -1, -1, -1, -1, -1, -1 },
+                WinnerID = -1
+            };
+
+            _mockGameRepo.Setup(m => m.GetGame(gameId)).ReturnsAsync(gameModel);
+
+            // act
+            // assert
+            var result = await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _gameService.MakeMove(gameId, 0, 1));
+        }
+
+        [Fact]
+        public async void MakeMoveCallsRepoGetGameAndUpdateGame()
+        {
+            // arrange
+            var playerOneId = 1;
+            var playerTwoId = -1;
+            var gameId = Guid.NewGuid();
+            var gameModel = new GameModel
+            {
+                GameID = gameId,
+                PlayerOneID = playerOneId,
+                PlayerTwoID = playerTwoId,
+                BoardSpaces = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+                WinnerID = -1
+            };
+
+            _mockGameRepo.Setup(m => m.GetGame(gameId)).ReturnsAsync(gameModel);
+            _mockGameRepo.Setup(m => m.UpdateGame(gameModel)).ReturnsAsync(gameModel);
+
+            // act
+            var returnVal = await _gameService.MakeMove(gameId, 0, 1);
+
+            // assert
+            _mockGameRepo.Verify(m => m.GetGame(gameId), Times.Once());
+            _mockGameRepo.Verify(m => m.UpdateGame(gameModel), Times.Once());
+
         }
     }
 }
