@@ -36,7 +36,7 @@ namespace ttt_service.Controllers
 
         // PUT api/<GameController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] int spaceIndex, int player)
+        public async Task<IActionResult> Put(Guid id, int spaceIndex, int player)
         {
             return Ok(await _gameService.MakeMove(id, spaceIndex, player));
         }
