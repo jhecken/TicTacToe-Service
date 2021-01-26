@@ -29,27 +29,23 @@ namespace ttt_service.Controllers
 
         // GET api/<GameController>/5
         [HttpGet("{id}")]
-        public string Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
-        }
-
-        // POST api/<GameController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
+            return Ok(await _gameService.GetGame(id));
         }
 
         // PUT api/<GameController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(Guid id, int spaceIndex, int player)
         {
+            return Ok(await _gameService.MakeMove(id, spaceIndex, player));
         }
 
         // DELETE api/<GameController>/5
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            return Ok(await _gameService.DeleteGame(id));
         }
     }
 }
