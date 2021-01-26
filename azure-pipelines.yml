@@ -21,6 +21,14 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+# - task: SonarCloudPrepare@1
+#   inputs:
+#     SonarCloud: 'SonarCloud'
+#     organization: 'jdheckdevelopment'
+#     scannerMode: 'MSBuild'
+#     projectKey: 'JDHeckDevelopment_Capstone-TicTacToe'
+#     projectName: 'Capstone-TicTacToe'
+
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'SonarCloud'
@@ -28,6 +36,11 @@ steps:
     scannerMode: 'MSBuild'
     projectKey: 'JDHeckDevelopment_Capstone-TicTacToe'
     projectName: 'Capstone-TicTacToe'
+    extraProperties: |
+      sonar.exclusions=**/obj/**,**/*.dll
+      sonar.branch.name=$(Build.SourceBranchName)
+      sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
 
 - task: VSBuild@1
   inputs:
