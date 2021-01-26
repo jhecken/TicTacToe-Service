@@ -29,6 +29,19 @@ steps:
     projectKey: 'JDHeckDevelopment_Capstone-TicTacToe'
     projectName: 'Capstone-TicTacToe'
 
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet testing'
+  inputs:
+    command: 'test'
+    arguments: '--configuration $(BuildConfiguration)
+      /p:CollectCoverage=true 
+      /p:CoverletOutputFormat=opencover 
+      /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
+      --collect "Codecoverage"
+      --logger trx'
+    projects: '**/*Test.csproj'
+    nobuild: true
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -36,10 +49,10 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+# - task: VSTest@2
+#   inputs:
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
 
 - task: SonarCloudAnalyze@1
 
