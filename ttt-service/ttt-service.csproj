@@ -2,7 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DebugType>Full</DebugType>
     <RootNamespace>ttt_service</RootNamespace>
+    <ProjectGuid>{9C7DDE0B-AB05-46AB-9C03-B6AE5327E0DF}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
