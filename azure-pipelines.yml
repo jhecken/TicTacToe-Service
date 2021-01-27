@@ -47,7 +47,7 @@ steps:
     solution: '$(solution)'
     msbuildArgs: '/p:DeployOnBuild=true 
       /p:WebPublishMethod=Package 
-      /p:PackageAsSingleFile=true 
+      #/p:PackageAsSingleFile=true 
       /p:SkipInvalidConfigurations=true 
       /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" 
       /p:DeployIisAppPath="Default Web Site"'
@@ -84,12 +84,4 @@ steps:
     azureSubscription: 'Azure subscription 1(f4c13e81-6cbe-4949-ab59-f130a8a40d47)'
     appType: 'webApp'
     WebAppName: 'Jd-TicTacToe-Api'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-
-# - task: AzureRmWebAppDeployment@4
-#   inputs:
-#     ConnectionType: 'AzureRM'
-#     azureSubscription: 'Azure subscription 1(f4c13e81-6cbe-4949-ab59-f130a8a40d47)'
-#     appType: 'webApp'
-#     WebAppName: 'Jd-TicTacToe-Api'
-#     packageForLinux: '$(build.artifactStagingDirectory)\WebApp.zip'
+    packageForLinux: '$(build.artifactStagingDirectory)\WebApp.zip'
