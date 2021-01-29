@@ -15,7 +15,7 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
-- stage: Build API
+- stage: Build_API
   jobs:
     - job:
       steps:
@@ -64,7 +64,7 @@ stages:
         inputs:
           pollingTimeoutSec: '300'
 
-- stage: Delpoy API
+- stage: Delpoy_API
   jobs:
     - job:
       steps:
