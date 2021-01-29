@@ -14,74 +14,64 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
-- task: NuGetToolInstaller@1
+stages:
+- stage: Build API
+  jobs:
+    - job:
+      steps:
+      - task: NuGetToolInstaller@1
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '$(solution)'
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'SonarCloud'
+          organization: 'jdheckdevelopment'
+          scannerMode: 'MSBuild'
+          projectKey: 'JDHeckDevelopment_Capstone-TicTacToe'
+          projectName: 'Capstone-TicTacToe'
+          extraProperties: |
+            sonar.exclusions=**/obj/**,**/*.dll
+            sonar.branch.name=$(Build.SourceBranchName)
+            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
+      - task: VSBuild@1
+        inputs:
+          solution: '$(solution)'
+          msbuildArgs: '/p:DeployOnBuild=true 
+            /p:WebPublishMethod=Package 
+            /p:PackageAsSingleFile=true 
+            /p:SkipInvalidConfigurations=true 
+            /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" 
+            /p:DeployIisAppPath="Default Web Site"'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet testing'
+        inputs:
+          command: 'test'
+          arguments: '--configuration $(BuildConfiguration)
+            /p:CollectCoverage=true 
+            /p:CoverletOutputFormat=opencover 
+            /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
+            --collect "Codecoverage"
+            --logger trx'
+          projects: '**/*Test.csproj'
+          nobuild: true
+      - task: SonarCloudAnalyze@1
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
 
-# - task: SonarCloudPrepare@1
-#   inputs:
-#     SonarCloud: 'SonarCloud'
-#     organization: 'jdheckdevelopment'
-#     scannerMode: 'MSBuild'
-#     projectKey: 'JDHeckDevelopment_Capstone-TicTacToe'
-#     projectName: 'Capstone-TicTacToe'
-
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'SonarCloud'
-    organization: 'jdheckdevelopment'
-    scannerMode: 'MSBuild'
-    projectKey: 'JDHeckDevelopment_Capstone-TicTacToe'
-    projectName: 'Capstone-TicTacToe'
-    extraProperties: |
-      sonar.exclusions=**/obj/**,**/*.dll
-      sonar.branch.name=$(Build.SourceBranchName)
-      sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
-
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true 
-      /p:WebPublishMethod=Package 
-      /p:PackageAsSingleFile=true 
-      /p:SkipInvalidConfigurations=true 
-      /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" 
-      /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet testing'
-  inputs:
-    command: 'test'
-    arguments: '--configuration $(BuildConfiguration)
-      /p:CollectCoverage=true 
-      /p:CoverletOutputFormat=opencover 
-      /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
-      --collect "Codecoverage"
-      --logger trx'
-    projects: '**/*Test.csproj'
-    nobuild: true
-
-# - task: VSTest@2
-#   inputs:
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
-
-- task: SonarCloudAnalyze@1
-
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
-
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure subscription 1(f4c13e81-6cbe-4949-ab59-f130a8a40d47)'
-    appType: 'webApp'
-    WebAppName: 'Jd-TicTacToe-Api'
-    packageForLinux: '$(build.artifactStagingDirectory)\WebApp.zip'
+- stage: Delpoy API
+  jobs:
+    - job:
+      steps:
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Azure subscription 1(f4c13e81-6cbe-4949-ab59-f130a8a40d47)'
+          appType: 'webApp'
+          WebAppName: 'Jd-TicTacToe-Api'
+          packageForLinux: '$(build.artifactStagingDirectory)\WebApp.zip'
