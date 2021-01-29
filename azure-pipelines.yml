@@ -47,7 +47,7 @@ stages:
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
 
-      - publish: $(System.DefaultWorkingDirectory)/TicTacToe-API/release
+      - publish: $(build.artifactStagingDirectory)\
         artifact: APIRelease
 
       - task: DotNetCoreCLI@2
@@ -83,5 +83,4 @@ stages:
           azureSubscription: 'Azure subscription 1(f4c13e81-6cbe-4949-ab59-f130a8a40d47)'
           appType: 'webApp'
           WebAppName: 'Jd-TicTacToe-Api'
-          packageForLinux: $(Build.SourcesDirectory)/release' 
-          #'$(build.artifactStagingDirectory)\WebApp.zip'
+          packageForLinux: '$(build.artifactStagingDirectory)\'
