@@ -15,6 +15,8 @@ namespace ttt_service
 {
     public class Startup
     {
+        // PR Tests
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
