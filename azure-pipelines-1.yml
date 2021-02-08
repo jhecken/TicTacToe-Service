@@ -1,0 +1,49 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- develop
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Debug'
+
+steps:
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'jdheckdevelopment'
+    scannerMode: 'MSBuild'
+    projectKey: 'JDHeckDevelopment_Capstone-TicTacToe'
+    projectName: 'Capstone-TicTacToe'
+    extraProperties: |
+      sonar.exclusions=**/*.bin
+      sonar.cs.dotcover.reportsPaths=$(Common.TestResultsDirectory)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: 'ttt-serice-test/ttt-service-test.csproj'
+    arguments: '--logger:"trx;LogFileName=$(Common.TestResultsDirectory)" --collect:"Code Coverage" /p:CoverletOutputFormat=opencover'
+
+# - script: dotnet build --configuration $(buildConfiguration)
+#   displayName: 'dotnet build $(buildConfiguration)'
