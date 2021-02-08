@@ -40,10 +40,23 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet testing'
   inputs:
     command: 'test'
-    projects: 'ttt-serice-test/ttt-service-test.csproj'
-    arguments: '--logger:"trx;LogFileName=$(Common.TestResultsDirectory)" --collect:"Code Coverage" /p:CoverletOutputFormat=opencover'
+    arguments: '--configuration $(BuildConfiguration)
+      /p:CollectCoverage=true 
+      /p:CoverletOutputFormat=opencover 
+      /p:Coverletoutput=$(Common.TestResultsDirectory) 
+      --collect "Codecoverage"
+      --logger trx'
+    projects: '**/*Test.csproj'
+    nobuild: true
+
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'test'
+#     projects: 'ttt-serice-test/ttt-service-test.csproj'
+#     arguments: '--logger:"trx;LogFileName=$(Common.TestResultsDirectory)" --collect:"Code Coverage" /p:CoverletOutputFormat=opencover'
 
 - task: SonarCloudAnalyze@1
 
