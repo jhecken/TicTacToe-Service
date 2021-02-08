@@ -45,5 +45,7 @@ steps:
     projects: 'ttt-serice-test/ttt-service-test.csproj'
     arguments: '--logger:"trx;LogFileName=$(Common.TestResultsDirectory)" --collect:"Code Coverage" /p:CoverletOutputFormat=opencover'
 
+- task: SonarCloudAnalyze@1
+
 # - script: dotnet build --configuration $(buildConfiguration)
 #   displayName: 'dotnet build $(buildConfiguration)'
