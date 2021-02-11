@@ -12,7 +12,7 @@ pool:
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  buildConfiguration: 'Debug'
 
 steps:
 
@@ -30,8 +30,9 @@ steps:
     projectKey: 'JDHeckDevelopment_Capstone-TicTacToe'
     projectName: 'Capstone-TicTacToe'
     extraProperties: |
-      sonar.exclusions=**/*.bin
-      sonar.cs.dotcover.reportsPaths=$(Common.TestResultsDirectory)/**/*.xml'
+      sonar.exclusions=**/obj/**,**/*.dll
+      sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
 
 - task: VSBuild@1
   inputs:
@@ -46,11 +47,17 @@ steps:
     arguments: '--configuration $(BuildConfiguration)
       /p:CollectCoverage=true 
       /p:CoverletOutputFormat=opencover 
-      /p:Coverletoutput=$(Common.TestResultsDirectory) 
+      /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
       --collect "Codecoverage"
       --logger trx'
     projects: '**/*Test.csproj'
     nobuild: true
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
 
 # - task: DotNetCoreCLI@2
 #   inputs:
@@ -58,7 +65,6 @@ steps:
 #     projects: 'ttt-serice-test/ttt-service-test.csproj'
 #     arguments: '--logger:"trx;LogFileName=$(Common.TestResultsDirectory)" --collect:"Code Coverage" /p:CoverletOutputFormat=opencover'
 
-- task: SonarCloudAnalyze@1
 
 # - script: dotnet build --configuration $(buildConfiguration)
 #   displayName: 'dotnet build $(buildConfiguration)'
