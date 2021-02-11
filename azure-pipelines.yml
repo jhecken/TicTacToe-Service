@@ -79,17 +79,7 @@ stages:
       - task: AzureRmWebAppDeployment@4
         inputs:
           ConnectionType: 'AzureRM'
-          azureSubscription: 'Azure subscription 1(f4c13e81-6cbe-4949-ab59-f130a8a40d47)'
+          azureSubscription: '$(azureSubscription)'
           appType: 'webApp'
           WebAppName: 'Jd-TicTacToe-Api'
           packageForLinux: '$(System.DefaultWorkingDirectory)/release/WebApp.zip'
-
-      # - task: AzureRmWebAppDeployment@4
-      #   inputs:
-      #     ConnectionType: 'AzureRM'
-      #     azureSubscription: 'Azure subscription 1(f4c13e81-6cbe-4949-ab59-f130a8a40d47)'
-      #     appType: 'webApp'
-      #     WebAppName: 'Jd-TicTacToe-Api'
-      #     packageForLinux: '$(build.artifactStagingDirectory)\WebApp.zip'
-      
-    # sonar.branch.name=$(Build.SourceBranchName)
