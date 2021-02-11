@@ -31,7 +31,7 @@ steps:
     projectName: 'Capstone-TicTacToe'
     extraProperties: |
       sonar.exclusions=**/*.bin
-      sonar.cs.dotcover.reportsPaths=$(Common.TestResultsDirectory)'
+      sonar.cs.dotcover.reportsPaths=$(Common.TestResultsDirectory)/**/*.xml'
 
 - task: VSBuild@1
   inputs:
