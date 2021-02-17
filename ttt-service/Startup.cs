@@ -15,6 +15,8 @@ namespace ttt_service
 {
     public class Startup
     {
+        // PR Tests
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,6 +28,11 @@ namespace ttt_service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin",
+                    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ttt-service", Version = "v1" });
@@ -47,6 +54,8 @@ namespace ttt_service
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ttt-service v1"));
             }
+
+            app.UseCors("AllowOrigin");
 
             app.UseHttpsRedirection();
 
