@@ -17,20 +17,40 @@ namespace ttt_service.Services
             _gameFactory = gameFactory;
         }
 
-        public async Task<GameModel> NewGame(int p1Id, int p2Id)
+        public async Task<GameUiModel> NewGame(int p1Id, int p2Id)
         {
             var newGame = _gameFactory.CreateGameInstance(p1Id, p2Id);
 
             newGame = await _gameRepo.CreateGame(newGame);
-            return newGame;
+            var returnGame = new GameUiModel
+            {
+                GameID = newGame.GameID.ToString(),
+                PlayerOneID = newGame.PlayerOneID,
+                PlayerTwoID = newGame.PlayerTwoID,
+                BoardSpaces = newGame.BoardSpaces,
+                WinnerID = newGame.WinnerID
+            };
+            return returnGame;
         }
 
-        public async Task<GameModel> GetGame(Guid id)
+        public async Task<GameUiModel> GetGame(Guid id)
         {
-            return await _gameRepo.GetGame(id);
+            var game = await _gameRepo.GetGame(id);
+            if (game == null)
+                return null;
+
+            var returnGame = new GameUiModel
+            {
+                GameID = game.GameID.ToString(),
+                PlayerOneID = game.PlayerOneID,
+                PlayerTwoID = game.PlayerTwoID,
+                BoardSpaces = game.BoardSpaces,
+                WinnerID = game.WinnerID
+            };
+            return returnGame;
         }
 
-        public async Task<GameModel> MakeMove(Guid gameId, int spaceIndex, int playerNum)
+        public async Task<GameUiModel> MakeMove(Guid gameId, int spaceIndex, int playerNum)
         {
             if (playerNum != 1 && playerNum != 2)
                 throw new ArgumentOutOfRangeException("Player number must be either a 1 or a 2.");
@@ -49,12 +69,30 @@ namespace ttt_service.Services
 
             CheckForEndOfGame(game);
 
-            return await _gameRepo.UpdateGame(game);
+            game = await _gameRepo.UpdateGame(game);
+            var returnGame = new GameUiModel
+            {
+                GameID = game.GameID.ToString(),
+                PlayerOneID = game.PlayerOneID,
+                PlayerTwoID = game.PlayerTwoID,
+                BoardSpaces = game.BoardSpaces,
+                WinnerID = game.WinnerID
+            };
+            return returnGame;
         }
 
-        public async Task<GameModel> DeleteGame(Guid id)
+        public async Task<GameUiModel> DeleteGame(Guid id)
         {
-            return await _gameRepo.DeleteGame(id);
+            var game = await _gameRepo.DeleteGame(id);
+            var returnGame = new GameUiModel
+            {
+                GameID = game.GameID.ToString(),
+                PlayerOneID = game.PlayerOneID,
+                PlayerTwoID = game.PlayerTwoID,
+                BoardSpaces = game.BoardSpaces,
+                WinnerID = game.WinnerID
+            };
+            return returnGame;
         }
 
         private void CheckForEndOfGame(GameModel game)
@@ -122,7 +160,7 @@ namespace ttt_service.Services
             }
 
             // check for a draw
-            if(game.BoardSpaces.Select(n => n == -1).Count() == 0)
+            if(game.BoardSpaces.Any(n => n == -1))
             {
                 game.WinnerID = 0;
             }

@@ -24,6 +24,7 @@ namespace ttt_service.Controllers
         [HttpGet]
         public async Task<IActionResult> NewGame(int playerOneId, int playerTwoId)
         {
+            
             return Ok(await _gameService.NewGame(playerOneId, playerTwoId));
         }
 
